@@ -120,6 +120,11 @@ export const textGenModels: Model[] = [{
 }]
 
 export const imageGenModels: Model[] = [{
+    id: '@cf/black-forest-labs/flux-1-schnell',
+    name: 'flux-1-schnell',
+    provider: 'workers-ai-image',
+    type: 'text-to-image'
+}, {
     id: '@cf/lykon/dreamshaper-8-lcm',
     name: 'dreamshaper-8-lcm',
     provider: 'workers-ai-image',
