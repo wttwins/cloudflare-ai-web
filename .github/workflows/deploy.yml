@@ -37,7 +37,7 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "wttwins-cloudflare-96"
+          project: "wttwins-ai-web"
           entrypoint: "server/index.ts"
           root: ".output"
           
