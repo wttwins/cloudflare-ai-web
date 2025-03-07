@@ -53,6 +53,18 @@ export function imageResponse(res: Response) {
     })
 }
 
+export function fluxImageResponse(res: Response) {
+    // Convert from base64 string
+    const binaryString = atob(res.body);
+    // Create byte representation
+    res.body = Uint8Array.from(binaryString, (m) => m.codePointAt(0));
+    return new Response(res.body, {
+        headers: {
+            'Content-Type': 'image/png',
+        }
+    })
+}
+
 export async function handleErr(res: Response) {
     const text = await res.text()
     console.error(res.status, res.statusText, text)
