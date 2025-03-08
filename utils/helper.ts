@@ -55,10 +55,10 @@ export function imageResponse(res: Response) {
 
 export function fluxImageResponse(res: Response) {
     // Convert from base64 string
-    const binaryString = atob(res.body);
+    const binaryString = atob(res.body.image);
     // Create byte representation
-    res.body = Uint8Array.from(binaryString, (m) => m.codePointAt(0));
-    return new Response(res.body, {
+    res.body.image = Uint8Array.from(binaryString, (m) => m.codePointAt(0));
+    return new Response(res.body.image, {
         headers: {
             'Content-Type': 'image/png',
         }
