@@ -1,4 +1,4 @@
-import {handleErr, imageResponse} from "~/utils/helper";
+import {handleErr, imageResponse, fluxImageResponse} from "~/utils/helper";
 import {WorkersBodyImage, WorkersReqImage} from "~/utils/types";
 
 export default defineEventHandler(async (event) => {
