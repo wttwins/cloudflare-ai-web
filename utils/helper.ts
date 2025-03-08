@@ -53,16 +53,44 @@ export function imageResponse(res: Response) {
     })
 }
 
-export function fluxImageResponse(res: Response) {
-    // Convert from base64 string
-    const binaryString = atob(res.body.image);
-    // Create byte representation
-    res.body.image = Uint8Array.from(binaryString, (m) => m.codePointAt(0));
-    return new Response(res.body.image, {
-        headers: {
-            'Content-Type': 'image/png',
+export async function fluxImageResponse(res: Response) {
+    try {
+        // 获取响应数据
+        const data = await res.json()
+            
+        if (!data || typeof data.result.image !== 'string') {
+            throw new Error('Invalid response format from Flux model')
         }
-    })
+
+        if (!data.result.image) {
+            throw new Error('No image data in response')
+        }
+
+        // 从 base64 字符串转换
+        let binaryString
+        try {
+            binaryString = atob(data.result.image)
+        } catch (e) {
+            console.error('Base64 decode error:', e)
+            throw new Error('Invalid base64 image data')
+        }
+        const img = new Uint8Array(binaryString.length)
+        
+        for (let i = 0; i < binaryString.length; i++) {
+            const charCode = binaryString.charCodeAt(i)
+            img[i] = charCode
+        }
+        return new Response(img, {
+            headers: {
+                'Content-Type': 'image/jpeg',
+            }
+        })
+    } catch (e) {
+        console.error('Flux image processing error:', e)
+        return new Response(`Error processing flux image: ${e.message}`, {
+            status: 500
+        })
+    }
 }
 
 export async function handleErr(res: Response) {
