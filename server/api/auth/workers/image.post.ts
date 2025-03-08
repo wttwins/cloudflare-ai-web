@@ -22,6 +22,8 @@ export default defineEventHandler(async (event) => {
     if (!res.ok) {
         return handleErr(res)
     }
-
-    return imageResponse(res)
+    return model.toLowerCase().includes('flux') 
+        ? fluxImageResponse(res)
+        : imageResponse(res)
+//   return imageResponse(res)
 })
