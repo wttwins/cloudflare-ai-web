@@ -1,12 +1,14 @@
-import {handleErr, imageResponse, fluxImageResponse} from "~/utils/helper";
+import {handleErr, imageResponse, fluxImageResponse, translatePrompt} from "~/utils/helper";
 import {WorkersBodyImage, WorkersReqImage} from "~/utils/types";
 
 export default defineEventHandler(async (event) => {
     const body: WorkersReqImage = await readBody(event)
     const {model, messages, num_steps} = body
 
+    const transPrompt = await translatePrompt(messages[0].content)
+    
     const workersBody: WorkersBodyImage = {
-        prompt: messages[0].content,
+        prompt: transPrompt,
         num_steps
     }
 
@@ -22,8 +24,10 @@ export default defineEventHandler(async (event) => {
     if (!res.ok) {
         return handleErr(res)
     }
+
+    // 检查 model 名称是否包含 'flux'
     return model.toLowerCase().includes('flux') 
         ? fluxImageResponse(res)
         : imageResponse(res)
-//   return imageResponse(res)
 })
+
